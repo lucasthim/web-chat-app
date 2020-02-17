@@ -6,36 +6,30 @@ import Container from '@material-ui/core/Container';
 import MessageBox  from "./MessageBox";
 import Messages from './Messages';
 import Message from './Messages/Message';
+import useChat from './_useChat';
+import NickName from './NickName';
+
+var sessionNickName = ''
 
 const Chat = () => {
+    const {messages, sendMessage} = useChat();
     return (
         <div>
+        <NickName onSetNickname = {(nickname) => {sessionNickName = nickname}}/>
         <Container maxWidth="sm">
-                {/* <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '80vh',margin:'2vh 0 1vh 0' }} /> */}
-            <Messages messages = { mockMessages}/>
-            <MessageBox onSendmessage = {(message) =>onSendMessageEvent(message)}/>
+            <h1>Super Cool Chat App</h1>
+            <Typography component="div" style={{ height: '70vh',margin:'2vh 0 1vh 0' }}>
+                <Messages messages = {messages}/>
+            </Typography>
+            <MessageBox onSendmessage = {(message) => sendMessage(prepareMessageToSend(message))}/>
         </Container>
         </div>
-        )};
+    );
+};
 
-function onSendMessageEvent (message) {
-    alert("Message sent: " + message)
-
-    mockMessages.push(new Message(message,'Lucas Thimoteo'))
+function prepareMessageToSend(message) {
+    var message = new Message(message,sessionNickName);
+    return message;
 }
-
-var mockMessages = [
-    new Message('That is awesome!'),
-    new Message('That is great!'),
-    new Message('That is awesome!'),
-    new Message('That is great!'),
-    new Message('That is awesome!'),
-    new Message('That is great!')
-];
-
-function getMessagesFromSession () {
- return mockMessages;
-}
-
 
 export default Chat;

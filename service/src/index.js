@@ -10,11 +10,15 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log('connection established');
-
-  socket.on('message', function (msg) { 
-    console.log('Message received: ',msg);
+  console.log('Connection established!');
+  //TODO: Create event for user joined and emit message to front end
+  
+  socket.on('newChatMessage', (data) => { 
+    io.emit('newChatMessage', data);
+    console.log('Message received: ',data);
+    // TODO: Save new message in database
   });
+
   socket.on('disconnet', function() { 'Bailed out!'});
 });
 

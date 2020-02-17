@@ -20,18 +20,18 @@ const Messages = ({ messages }) => {
 
 
 function listMessages(messages) {
-
+    console.log(messages)
     return messages.flatMap((message, index) => [
         <ListItem alignItems="flex-start" key={index}>
             <ListItemAvatar>
-                <Avatar alt={message.user} src="/"/>
+                <Avatar alt={message?.user} src="/"/>
             </ListItemAvatar>
             <ListItemText 
-                primary={message.user}
+                primary={message?.user}
                 secondary={
                 <React.Fragment>
                     <Typography component="span" variant="body2" color="textPrimary">
-                        {formatDateAndTime(message.datetime) } — </Typography> {message.body}
+                        {formatDateAndTime(message?.datetime) } — </Typography> {message?.body}
                 </React.Fragment>
                 }/>
         </ListItem>,
@@ -41,7 +41,10 @@ function listMessages(messages) {
 }
 
 function formatDateAndTime(datetime){
-    var datetime =  new Date(datetime).toLocaleTimeString()
-    return datetime
+    if(datetime != null || datetime != undefined){
+        var datetime =  new Date(datetime).toLocaleTimeString()
+        return datetime
+    }
+    return ''
 }
 export default Messages;
