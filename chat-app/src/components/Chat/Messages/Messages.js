@@ -12,17 +12,17 @@ import Typography from '@material-ui/core/Typography';
 const Messages = ({ messages }) => {
   return (
     <List>
-    {listMessages(messages)}
+    {listChat(messages)}
     </List>
 
   );
 };
 
 
-function listMessages(messages) {
+function listChat(messages) {
     console.log(messages)
     return messages.flatMap((message, index) => [
-        <ListItem alignItems="flex-start" key={index}>
+        message.isUserMessage? <ListItem alignItems="flex-start" key={index}>
             <ListItemAvatar>
                 <Avatar alt={message?.user} src="/"/>
             </ListItemAvatar>
@@ -34,7 +34,8 @@ function listMessages(messages) {
                         {formatDateAndTime(message?.datetime) } — </Typography> {message?.body}
                 </React.Fragment>
                 }/>
-        </ListItem>,
+        </ListItem> : 
+        <ListItemText primary={message?.statusMessage}/>,
         <Divider variant="inset" component="li" key={"divider-"+index}></Divider>
 
     ]).slice(0,-1)

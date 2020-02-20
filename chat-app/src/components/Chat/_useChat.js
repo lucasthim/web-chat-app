@@ -7,31 +7,41 @@ const server_url = `http://localhost:${server_port}/`;
 
 const useChat = () => {
     const [messages, setMessages] = useState([])
-    const sockerRef = useRef();
+    const socketRef = useRef();
 
     useEffect(() => {
-        sockerRef.current = socketIOClient(server_url);
+        socketRef.current = socketIOClient(server_url);
 
-        sockerRef.current.on('newChatMessage',(message) => {
+        socketRef.current.on('newChatMessage',(message) => {
             setMessages((messages) => [...messages,message]);
         });
+
+        socketRef.current.on('loadChatHistory',(loadedMessages) => {
+            // setMessages((messages) => [...messages,loadedMessages]);
+            console.log(loadedMessages)
+        });
+
         
-        // sockerRef.current.on('disconnect', () => {
+        // socketRef.current.on('disconnect', () => {
         // TODO: Notify that user left the room 
         // });
 
         return () => {
-            sockerRef.current.disconnect();
+            socketRef.current.disconnect();
         };
 
             
     },[]);
 
-    const sendMessage = (message) => {
-        sockerRef.current.emit('newChatMessage',message)
-    }
+    const sendMessage = (message) => { socketRef.current.emit('newChatMessage',message) }
 
-    return {messages, sendMessage};
+    const userConnected = (nickname) => { socketRef.current.emit('loadMessages'); }
+
+    const userDisconnected = (nickname) => { socketRef.current.emit('loadMessages'); console.log('User disconnected') }
+    
+    return {messages, sendMessage, userConnected, userDisconnected};
 }
+
+
 
 export default useChat;
