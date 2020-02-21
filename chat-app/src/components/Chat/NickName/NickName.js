@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Typography from '@material-ui/core/Typography';
 
-const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
+const NickName = ({onSetNickname: pushSetNickname, existingNicknames:existingNicknames}) => {
   const [open, setOpen] = useState(true);
   const [nickname, setNickname] = useState("");
   const [warningNickname, setWarningNickname] = useState(false);
@@ -17,7 +17,7 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
     if(nickname == null || nickname == ""){
       setWarningNickname(true);
       setnicknameAlreadyChosen(false);
-    } else if (existingNicknames.includes(nickname)){
+    } else if (existingNicknames?.includes(nickname)){
       setWarningNickname(false);
       setnicknameAlreadyChosen(true);
     } else {
@@ -25,11 +25,6 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
       pushSetNickname(nickname);
     }
   };
-
-  const handleCloseNo = () => {
-    setOpen(false);
-    pushSetNickname('Anonymous');
-  }
 
   function showWarningPickNickname() {
     return (warningNickname ? 
@@ -39,11 +34,16 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
   }
 
   function showWarningNicknameChosen() {
-    warningNickname
+    var message = "Your nickname has been already picked! Please, pick another one."
     return (nicknameAlreadyChosen ? 
       <Typography variant="caption" align="center" color="error" gutterBottom>
-        Your nickname has been already picked! Please, pick another one.
+        {message}
       </Typography> : null);
+  }
+
+  function disableConfirmButton() {
+    console.log(existingNicknames == undefined || existingNicknames == null)
+    return existingNicknames == undefined || existingNicknames == null;
   }
 
   return (
@@ -52,7 +52,6 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
       open={open} 
       disableBackdropClick={true} 
       disableEscapeKeyDown={true}
-      // onEnter={handleClose}
       aria-labelledby="form-dialog-title">
         <DialogContent>
           <DialogContentText>
@@ -69,10 +68,8 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
           />
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={handleCloseNo} color="primary">
-            Don't Feel Like It
-          </Button> */}
-          <Button onClick={handleClose} color="primary">
+
+          <Button onClick={handleClose} color="primary" disabled = {disableConfirmButton()}>
             Hook Me Up!
           </Button>
         </DialogActions>
@@ -83,7 +80,6 @@ const NickName = ({onSetNickname: pushSetNickname, existingNicknames}) => {
     </div>
   );
 }
-
 
 
 export default NickName

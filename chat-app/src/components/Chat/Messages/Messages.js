@@ -14,15 +14,13 @@ const Messages = ({ messages }) => {
     <List>
     {listChat(messages)}
     </List>
-
   );
 };
 
 
 function listChat(messages) {
-    console.log(messages)
     return messages.flatMap((message, index) => [
-        message.isUserMessage? <ListItem alignItems="flex-start" key={index}>
+        message.isUserMessage? <ListItem alignItems="flex-start">
             <ListItemAvatar>
                 <Avatar alt={message?.user} src="/"/>
             </ListItemAvatar>

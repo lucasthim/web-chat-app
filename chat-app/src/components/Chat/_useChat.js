@@ -7,6 +7,7 @@ const server_url = `http://localhost:${server_port}/`;
 
 const useChat = () => {
     const [messages, setMessages] = useState([])
+    const [users, setUsers] = useState([])
     const socketRef = useRef();
 
     useEffect(() => {
@@ -17,29 +18,24 @@ const useChat = () => {
         });
 
         socketRef.current.on('loadChatHistory',(loadedMessages) => {
-            // setMessages((messages) => [...messages,loadedMessages]);
+            setMessages((messages) => [...messages,loadedMessages]);
             console.log(loadedMessages)
         });
 
+        socketRef.current.on('loadUsers',(loadedUsers,) => {
+            setUsers((loadedUsers) => [...users,loadedUsers]);
+            console.log(loadedUsers)
+        });
         
-        // socketRef.current.on('disconnect', () => {
-        // TODO: Notify that user left the room 
-        // });
-
         return () => {
             socketRef.current.disconnect();
         };
-
-            
     },[]);
 
-    const sendMessage = (message) => { socketRef.current.emit('newChatMessage',message) }
+    const sendMessage = (message) => { socketRef.current.emit('newChatMessage',message) };
+    const sendUser = (user) => { socketRef.current.emit('loadUsers',user) };
 
-    const userConnected = (nickname) => { socketRef.current.emit('loadMessages'); }
-
-    const userDisconnected = (nickname) => { socketRef.current.emit('loadMessages'); console.log('User disconnected') }
-    
-    return {messages, sendMessage, userConnected, userDisconnected};
+    return {messages, sendMessage,users,sendUser};
 }
 
 

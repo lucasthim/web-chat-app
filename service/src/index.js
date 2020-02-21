@@ -12,20 +12,18 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   
   io.emit('loadChatHistory',messagesFromDB);
+  io.emit('loadUsers',nicknames);
+
   console.log(' New connection established!');
-  //TODO: Create event for user joined and emit message to front end
-  
+
   socket.on('newChatMessage', (data) => { 
     io.emit('newChatMessage', data);
+    messagesFromDB.push(data)
     console.log('Message received: ',data);
     // TODO: Save new message in database
   });
 
-  // socket.on('loadMessages', (data) => {
-  
-  // });
-
-  socket.on('disconnet', function() { 'Bailed out!'});
+  socket.on('disconnet', () => { 'Bailed out!'});
 });
 
 http.listen(PORT, function(){
@@ -35,10 +33,15 @@ http.listen(PORT, function(){
 
 
 messagesFromDB = [ 
-  {'isUserMessage': true, 'message':' This is a message', 'user':' John Doe','date':Date.now()},
-  {'isUserMessage': true, 'message':' This is a message', 'user':' John Doe','date':Date.now()},
-  {'isUserMessage': true, 'message':' This is a message', 'user':' John Doe','date':Date.now()},
-  {'isUserMessage': true, 'message':' This is a message', 'user':' John Doe','date':Date.now()},
-  {'isUserMessage': true, 'message':' This is a message', 'user':' John Doe','date':Date.now()}
+  {'user':' John Doe','body':'Fake Message from Mongo','datetime':Date.now(),'isUserMessage':true},
+  {'user':' John Doe','body':'Fake Message from Mongo','datetime':Date.now(),'isUserMessage':true},
+  {'user':' John Doe','body':'Fake Message from Mongo','datetime':Date.now(),'isUserMessage':true},
+  {'user':' John Doe','body':'Fake Message from Mongo','datetime':Date.now(),'isUserMessage':true},
+  {'user':' John Doe','body':'Fake Message from Mongo','datetime':Date.now(),'isUserMessage':true}
 
+]
+
+var nicknames = [
+  'Lucas',
+  'Lucas1'
 ]

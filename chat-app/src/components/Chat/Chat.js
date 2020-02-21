@@ -6,12 +6,11 @@ import Button from '@material-ui/core/Button';
 
 import MessageBox  from "./MessageBox";
 import Messages from './Messages';
-import Message from './Messages/Message';
+import Message from '../../models/Message';
 import useChat from './_useChat';
 import NickName from './NickName';
 
 var sessionNickName = ''
-var chatHistory = '';
 var nicknames = [
     'Lucas',
     'Lucas1'
