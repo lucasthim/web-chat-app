@@ -30,5 +30,5 @@ const MessageBox = ({onSendmessage: pushSendMessage}) => {
         </form>
     );
 };
-
+// TODO: Put two buttons with display:flex - Logout to the left and send message to the right
 export default MessageBox;
