@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import authenticationService from '../../resources/AuthenticationService';
+import LoginService  from "../../resources/LoginService";
 import NickName from './Nickname/Nickname';
 
 class Landing extends Component {
@@ -13,39 +15,54 @@ class Landing extends Component {
         this.state = {
             currentNickname: '',
             showDialog: false,
-            nicknameAlreadyChosen: false
+            nicknameAlreadyChosen: false,
+            isAuthenticated: false
         };
+        this.loginService = new LoginService();
+    }
+
+    componentDidMount() {
+        this.checkUserLoggedIn();
+    }
+
+    checkUserLoggedIn() {
+       if (authenticationService.isUserCached()){
+            authenticationService.loadUserIfCached(() => {
+                this.props.history.push('/chat');
+            });
+       }
     }
 
     saveNickname = (nickname) => {
-        fetch(`http://localhost:8001/nickname/${nickname}`)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
+        this.loginService.userLogin(nickname,(result) => {
+            this.setState({
                 isLoaded: true,
-                currentNickname: result.nickname,
-                nicknameAlreadyChosen: false,
-                showDialog: false
-                });
-                //Route to another page
-            },
-            (error) => {
-                this.setState({
-                isLoaded: true,
-                nicknameAlreadyChosen: true,
-                error
+                currentNickname: nickname,
+                nicknameAlreadyChosen: !result.data.nicknameSaved,
+                showDialog: !result.data.nicknameSaved
+            });
+
+            if(result.data.nicknameSaved){
+                authenticationService.login(nickname,() => {
+                    this.props.history.push('/chat');
                 });
             }
-        )
-    }
-
-    nicknameAvailable = (available) => {
-        this.setState({currentNickname:available})
+        },
+        (error) => {
+            this.setState({
+            isLoaded: true,
+            nicknameAlreadyChosen: true,
+            error
+            });
+        });
     }
 
     openDialog = () => {
         this.setState({showDialog:true})
+    }
+
+    closeDialog = (showDialog) => {
+        this.setState({showDialog:showDialog})
     }
 
     render() {
@@ -53,6 +70,7 @@ class Landing extends Component {
             <div>
                 <NickName 
                 emitNickname = {this.saveNickname}
+                emitCloseDialog = {this.closeDialog}
                 showDialog = {this.state.showDialog}
                 nicknameAlreadyChosen = {this.state.nicknameAlreadyChosen}/>
                 <Grid
@@ -67,9 +85,8 @@ class Landing extends Component {
                         <Typography variant="h5" align="center" color="primary" gutterBottom>
                             Ready to meet some really cool people and have a great time?
                         </Typography>
-                            
-                        {/* </Typography> */}
-                        <Button color="primary" onClick={this.openDialog} size="large">
+
+                        <Button color="primary" fullWidth={true} onClick={this.openDialog} size="large" variant="contained">
                             Click here!
                         </Button>
                     </Grid>   
