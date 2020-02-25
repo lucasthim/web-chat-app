@@ -15,8 +15,8 @@ class LoginService {
         .catch((error) => {fail(error)})
     } 
 
-    userLogout(userMessage, success,fail) {
-        axios.post(`${this.base_url}logout`,userMessage,{withCredentials:true})
+    userLogout(nickname, success,fail) {
+        axios.get(`${this.base_url}logout/${nickname}`,{withCredentials:true})
         .then(
             (response) => {success(response)}
             ,(error) => {fail(error)})
