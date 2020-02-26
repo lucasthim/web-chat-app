@@ -8,15 +8,11 @@ Multiple users are allowed to join to the same chat and all the messages can be 
 
 Upcoming features:
 - Save chat history on MongoDB.
-- Load the history of the conversation on the chat to a new user.
-- Log off button.
-- Keep user nickname and session if the user logs out without hitting the log off button.
-- Random nickname generator when the user doesn't want to create one.
 
 Some of the tools and frameworks for faster and better coding:
 
-- Material UI: for front-end components
-- Socket.IO: for a socket protocol communication between client and server
-- Parcel Bundler: web application bundler for easier configuration and faster compilation
-- Babel: JS compiler to convert ES2015+ code syntax to older browsers and environments
+- Material UI: for front-end components.
+- Socket.IO: for a socket protocol communication between client and server.
+- Express: http middleware for backend.
+- Babel: JS compiler for development.
 
