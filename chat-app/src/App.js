@@ -12,7 +12,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Landing} />
           <PrivateRoute exact path="/chat" component={Chat} />
-          <Route path="*" component={() => "404 NOT FOUND"} />
+          <Route path="*" component={() => "404 - PAGE NOT FOUND "} />
         </Switch>
       </div>
     );
